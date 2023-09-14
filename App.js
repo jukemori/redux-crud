@@ -58,6 +58,17 @@ export default function App() {
       });
   };
 
+  const toggleTaskStatus = (taskId, newStatus) => {
+    axios
+      .patch(`${API_BASE_URL}/tasks/${taskId}`, { done: newStatus })
+      .then(() => {
+        fetchTasks();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -66,6 +77,10 @@ export default function App() {
             <Text style={styles.title}>{task.title}</Text>
             <Text style={styles.description}>{task.description}</Text>
             <Text style={styles.done}>{task.done ? "Done" : "Not Done"}</Text>
+            <Button
+              title={task.done ? "Mark as Not Done" : "Mark as Done"}
+              onPress={() => toggleTaskStatus(task.id, !task.done)}
+            />
             <Button title="Delete" onPress={() => deleteTask(task.id)} />
           </Card>
         ))}
